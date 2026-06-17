@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Alerts</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Alerts</h1>
+
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Product</th>
+            <th>Message</th>
+            <th>Created At</th>
+            <th>Resolved</th>
+            <th>Action</th>
+        </tr>
+        {% for a in alerts %}
+        <tr class="{% if not a.resolved %}low-stock{% endif %}">
+            <td>{{ a.id }}</td>
+            <td>{{ a.product_name }}</td>
+            <td>{{ a.message }}</td>
+            <td>{{ a.created_at }}</td>
+            <td>{{ 'Yes' if a.resolved else 'No' }}</td>
+            <td>
+                {% if not a.resolved %}
+                <form action="/alerts/resolve/{{ a.id }}" method="POST">
+                    <button type="submit">Resolve</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <p><a href="/">Back to Shop</a></p>
+</body>
+</html>

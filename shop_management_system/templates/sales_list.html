@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sales</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Sales</h1>
+
+    <p><strong>Total Sales Value:</strong> {{ overall_total }} | <strong>Total Items Sold:</strong> {{ overall_qty }}</p>
+
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Total Price</th>
+            <th>Sold At</th>
+            <th>Receipt</th>
+        </tr>
+        {% for s in sales %}
+        <tr>
+            <td>{{ s.id }}</td>
+            <td><a href="/sales/product/{{ s.product_id }}">{{ s.product_name }}</a></td>
+            <td>{{ s.quantity }}</td>
+            <td>{{ s.total_price }}</td>
+            <td>{{ s.sold_at }}</td>
+            <td><a href="/receipt/{{ s.id }}" target="_blank">Receipt</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <p><a href="/">Back to Shop</a></p>
+</body>
+</html>

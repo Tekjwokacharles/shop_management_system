@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bona Shop Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <h1>Bona Shop Management System</h1>
+    <p class="header-links">
+        <a href="/report">Daily Report</a> | <a href="/reports">Saved Reports</a> | <a href="/sales">Sales</a> | <a href="/alerts">Alerts</a>
+        {% if session.username %}
+            | Logged in as {{ session.username }} (<a href="/logout">Logout</a>)
+        {% else %}
+            | <a href="/login">Login</a>
+        {% endif %}
+    </p>
+
+    <h2>Add Product</h2>
+    {% if session.is_admin %}
+    <form action="/add" method="POST">
+        <input type="text" name="name" placeholder="Product Name" required>
+
+        <input type="number" step="0.01" name="price" placeholder="Price" required>
+
+        <input type="number" name="quantity" placeholder="Quantity" required>
+
+        <select name="unit">
+            <option value="Kg">Kg</option>
+            <option value="Liter">Liter</option>
+            <option value="Piece" selected>Piece</option>
+            <option value="Bottle">Bottle</option>
+        </select>
+
+        <button type="submit">Add Product</button>
+    </form>
+    {% else %}
+    <p>Login as admin to add products.</p>
+    {% endif %}
+
+    <form action="/search" method="GET" style="margin-top:8px;">
+        <input type="text" name="q" placeholder="Search products" value="{{ query if query is defined else '' }}">
+        <button type="submit">Search</button>
+    </form>
+
+    <h2>Products</h2>
+
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Unit</th>
+            <th>Reorder</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for product in products %}
+        <tr>
+            <td>{{ product[0] }}</td>
+            <td>{{ product[1] }}</td>
+            <td>{{ product[2] }}</td>
+            <td class="{% if product[3] <= (product[5] if product|length>5 else 5) %}low-stock{% endif %}">{{ product[3] }}</td>
+            <td>{{ product[4] if product|length > 4 else 'Piece' }}</td>
+            <td>{{ product[5] if product|length>5 else 5 }}</td>
+            <td>
+                <a href="/product/{{ product[0] }}">View</a>
+                {% if session.is_admin %} |
+                <a href="/edit/{{ product[0] }}">Edit</a> |
+                <form action="/delete/{{ product[0] }}" method="POST" style="display:inline; margin:0; padding:0;">
+                    <button type="submit">Delete</button>
+                </form>
+                {% endif %}
+                {% if session.user_id %}
+                <form action="/sell/{{ product[0] }}" method="POST" style="display:inline; margin-left:6px;">
+                    <input type="number" name="sell_qty" value="1" min="1" style="width:60px">
+                    <button type="submit">Sell</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+
+    </table>
+
+</body>
+</html>
