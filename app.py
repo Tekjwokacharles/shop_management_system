@@ -24,7 +24,7 @@ def init_db():
         unit TEXT NOT NULL
     )
     """)
-
+     
     # Ensure `unit` column exists for older databases
     cursor.execute("PRAGMA table_info(products)")
     cols = [row[1] for row in cursor.fetchall()]
@@ -86,7 +86,7 @@ def init_db():
 
     conn.commit()
     conn.close()
-
+    # initialization complete
 # Home page
 @app.route('/')
 def home():
