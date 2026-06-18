@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Daily Report</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Daily Report - {{ report.date if report.date else report.report_date }}</h1>
+
+    <p><strong>Total Value:</strong> {{ report.total_value }}</p>
+    <p><strong>Total Items:</strong> {{ report.total_items }}</p>
+
+    {% if report.snapshot is defined %}
+    <h2>Saved Snapshot</h2>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Unit</th>
+        </tr>
+        {% for p in report.snapshot %}
+        <tr>
+            <td>{{ p.id }}</td>
+            <td>{{ p.name }}</td>
+            <td>{{ p.price }}</td>
+            <td>{{ p.quantity }}</td>
+            <td>{{ p.unit }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <h2>Current Inventory</h2>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Unit</th>
+        </tr>
+        {% for p in report.products %}
+        <tr>
+            <td>{{ p.id }}</td>
+            <td>{{ p.name }}</td>
+            <td>{{ p.price }}</td>
+            <td>{{ p.quantity }}</td>
+            <td>{{ p.unit }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <form action="/report/save" method="POST">
+        <button type="submit">Save Report</button>
+    </form>
+    {% endif %}
+
+    <p><a href="/reports">View Saved Reports</a> | <a href="/">Back to Shop</a></p>
+</body>
+</html>

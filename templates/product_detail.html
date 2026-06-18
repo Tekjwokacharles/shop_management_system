@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Product Detail</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Product Detail</h1>
+
+    <p><strong>ID:</strong> {{ product.id }}</p>
+    <p><strong>Name:</strong> {{ product.name }}</p>
+    <p><strong>Price:</strong> {{ product.price }}</p>
+    <p><strong>Quantity:</strong> {{ product.quantity }} {{ product.unit }}</p>
+
+    <p>
+        {% if session.is_admin %}
+        <a href="/edit/{{ product.id }}">Edit</a> |
+        <form action="/delete/{{ product.id }}" method="POST" style="display:inline;"><button type="submit">Delete</button></form> |
+        {% endif %}
+        {% if session.user_id %}
+        <form action="/sell/{{ product.id }}" method="POST" style="display:inline; margin-left:6px;">
+            <input type="number" name="sell_qty" value="1" min="1" style="width:60px">
+            <button type="submit">Sell</button>
+        </form> |
+        {% endif %}
+        <a href="/">Back</a>
+    </p>
+</body>
+</html>
