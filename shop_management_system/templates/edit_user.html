@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% if user is defined %}Edit User{% else %}Add User{% endif %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>{% if user is defined %}Edit User{% else %}Add User{% endif %}</h1>
+
+    <form method="POST">
+        <input type="text" name="username" placeholder="Username" value="{{ user.username if user is defined else '' }}" required>
+        <input type="password" name="password" placeholder="Password"> (leave blank to keep current)
+        <label><input type="checkbox" name="is_admin" {% if user is defined and user.is_admin %}checked{% endif %}> Admin</label>
+        <button type="submit">Save</button>
+    </form>
+
+    <p><a href="/users">Back to Users</a></p>
+</body>
+</html>

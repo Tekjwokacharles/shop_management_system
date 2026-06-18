@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Receipt #{{ sale.id }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .receipt { max-width: 600px; margin: 0 auto; background: #fff; color: #000; padding: 16px; }
+        .receipt h2 { margin-top: 0; }
+        .receipt table { width: 100%; background: transparent; color: #000; }
+        .print-btn { margin-top: 12px; }
+    </style>
+</head>
+<body>
+    <div class="receipt">
+        <h2>Shop Receipt</h2>
+        <p><strong>Sale ID:</strong> {{ sale.id }}</p>
+        <p><strong>Date:</strong> {{ sale.sold_at }}</p>
+
+        <table>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Total</th>
+            </tr>
+            <tr>
+                <td>{{ sale.product_name }}</td>
+                <td>{{ sale.quantity }} {{ sale.unit }}</td>
+                <td>{{ "{:.2f}".format(sale.unit_price) }}</td>
+                <td>{{ "{:.2f}".format(sale.total_price) }}</td>
+            </tr>
+        </table>
+
+        <p><strong>Grand Total:</strong> {{ "{:.2f}".format(sale.total_price) }}</p>
+
+        <button class="print-btn" onclick="window.print()">Print Receipt</button>
+        <p><a href="/sales">Back to Sales</a></p>
+    </div>
+</body>
+</html>
