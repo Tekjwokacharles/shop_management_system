@@ -8,7 +8,9 @@ import os
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_SECRET', 'dev-secret')
 
-DATABASE = "shop.db"
+# Ensure DB path is absolute and consistent with workspace
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATABASE = os.path.join(BASE_DIR, "shop.db")
 
 # Create database and products table
 def init_db():
