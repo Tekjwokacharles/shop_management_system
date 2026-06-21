@@ -8,27 +8,6 @@ import os
 # Ensure database file and minimal schema exist before any routes run
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATABASE = os.path.join(BASE_DIR, "shop.db")
-
-def init_db():
-    conn = sqlite3.connect(DATABASE)
-    cursor = conn.cursor()
-
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS products (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        price REAL NOT NULL,
-        quantity INTEGER NOT NULL,
-        unit TEXT NOT NULL
-    )
-    """)
-
-    conn.commit()
-    conn.close()
-
-# 🔥 FORCE RUN IMMEDIATELY ON STARTUP
-init_db()
-
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_SECRET', 'dev-secret')
 
@@ -109,6 +88,9 @@ def init_db():
     conn.commit()
     conn.close()
     # initialization complete
+
+# Ensure DB schema exists at import time (useful for WSGI servers)
+init_db()
 # Home page
 @app.route('/')
 def home():
